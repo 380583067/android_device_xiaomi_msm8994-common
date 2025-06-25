@@ -116,6 +116,10 @@ PRODUCT_PACKAGES += \
     libcnefeatureconfig \
     services-ext
 
+# Fastbootd
+PRODUCT_PACKAGES += \
+    fastbootd
+
 # Dummy hidl lib for oreo blobs
 PRODUCT_PACKAGES += \
     libhidltransport \
@@ -229,7 +233,8 @@ PRODUCT_PACKAGES += \
     libaudioclient_shim \
     librmnetctl \
     rild_socket \
-    libxml2
+    libxml2 \
+    libshim_ril
 
 # Power
 PRODUCT_PACKAGES += \

@@ -216,8 +216,11 @@ TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)
 # SELinux
 #include device/qcom/sepolicy-legacy/sepolicy.mk
 #BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy
-BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy-minimal
+#BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy-minimal
 SELINUX_IGNORE_NEVERALLOWS := true
+SELINUX_IGNORE_NEVERALLOWS_ON_USER := true
+BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/private
 
 # Shims
 TARGET_LD_SHIM_LIBS += \
@@ -226,7 +229,8 @@ TARGET_LD_SHIM_LIBS += \
     /system/vendor/lib64/libizat_core.so|libshims_get_process_name.so \
     /system/vendor/lib64/libril-qc-qmi-1.so|libaudioclient_shim.so \
     /system/vendor/lib64/libmm-abl.so|libshims_thermal.so \
-    /system/vendor/lib64/libmm-qdcm-diag.so|libshims_thermal.so
+    /system/vendor/lib64/libmm-qdcm-diag.so|libshims_thermal.so \
+    /system/vendor/lib64/libril-qc-qmi-1.so|libshim_ril.so
 
 # TWRP Support
 ifeq ($(WITH_TWRP),true)
