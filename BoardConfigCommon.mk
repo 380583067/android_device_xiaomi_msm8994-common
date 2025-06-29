@@ -129,14 +129,6 @@ TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
     /system/vendor/bin/mm-qcamera-daemon=22
 
-# Dexpreopt
-ifeq ($(HOST_OS),linux)
-  ifneq ($(TARGET_BUILD_VARIANT),eng)
-    WITH_DEXPREOPT ?= true
-  endif
-endif
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
-
 # Added to indicate that protobuf-c is supported in this build
 PROTOBUF_SUPPORTED := true
 
@@ -193,7 +185,7 @@ WIFI_DRIVER_MODULE_NAME         := "wlan"
 WIFI_DRIVER_FW_PATH_AP          := "ap"
 WIFI_DRIVER_FW_PATH_STA         := "sta"
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
-TARGET_USES_QCOM_WCNSS_QMI      := true
+TARGET_USES_QCOM_WCNSS_QMI      := false
 WPA_SUPPLICANT_VERSION          := VER_0_8_X
 
 # Recovery
@@ -210,7 +202,13 @@ TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)
 # SELinux
 include device/qcom/sepolicy-legacy/sepolicy.mk
 BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy
+
 SELINUX_IGNORE_NEVERALLOWS := true
+
+BOARD_SEPOLICY_M4DEFS += \
+    hal_perf_default=vendor_hal_perf_default \
+    hal_perf_hwservice=vendor_hal_perf_hwservice \
+    hal_perf_default_exec=vendor_hal_perf_default_exec
 
 # Shims
 TARGET_LD_SHIM_LIBS += \
@@ -219,7 +217,8 @@ TARGET_LD_SHIM_LIBS += \
     /system/vendor/lib64/libizat_core.so|libshims_get_process_name.so \
     /system/vendor/lib64/libril-qc-qmi-1.so|libaudioclient_shim.so \
     /system/vendor/lib64/libmm-abl.so|libshims_thermal.so \
-    /system/vendor/lib64/libmm-qdcm-diag.so|libshims_thermal.so
+    /system/vendor/lib64/libmm-qdcm-diag.so|libshims_thermal.so \
+    /system/vendor/lib64/libril-qc-qmi-1.so|libshim_ril.so
 
 # TWRP Support
 ifeq ($(WITH_TWRP),true)

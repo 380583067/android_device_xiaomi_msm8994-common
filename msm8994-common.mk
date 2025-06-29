@@ -292,12 +292,16 @@ PRODUCT_PACKAGES += \
     init.qcom.usb.sh \
     ueventd.qcom.rc \
     init.qcom.post_boot.sh
-    
+
 # Shim for S
 PRODUCT_PACKAGES += \
     libshims_thermal
-    
+
 # Vendor HIDL
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0 \
     android.hardware.neuralnetworks@1.3
+
+# Lineage Health
+PRODUCT_PACKAGES += \
+    vendor.lineage.health-service.default
