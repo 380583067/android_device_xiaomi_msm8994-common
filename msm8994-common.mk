@@ -215,7 +215,8 @@ PRODUCT_PACKAGES += \
     libaudioclient_shim \
     librmnetctl \
     rild_socket \
-    libxml2
+    libxml2 \
+    libshim_ril
 
 # Power
 PRODUCT_PACKAGES += \
