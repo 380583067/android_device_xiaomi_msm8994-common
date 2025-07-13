@@ -42,7 +42,7 @@ on fs
     setprop ro.adb.nonblocking_ffs 0
     setprop sys.usb.mtp.device_type 2
 
-service qcom-usb-sh /system/vendor/bin/init.qcom.usb.sh
+service qcom-usb-sh /vendor/bin/init.qcom.usb.sh
     class core
     user root
     #seclabel u:r:qti_init_shell:s0
