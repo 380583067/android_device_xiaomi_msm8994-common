@@ -228,3 +228,5 @@
 /sys/devices/soc.0/leds-qpnp-26/leds(/.*) u:object_r:sysfs_qpnp_26:s0
 # ram dumps
 /sys/module/subsystem_restart/parameters/enable_ramdumps u:object_r:sysfs_ramdumps:s0
+# 
+/vendor/lib64/egl/libEGL_adreno.so    u:object_r:vendor_file:s0
