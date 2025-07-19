@@ -125,30 +125,14 @@ TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_USES_VENDORIMAGE := true
 TARGET_COPY_OUT_VENDOR := vendor
-BOARD_NEEDS_VENDORIMAGE_SYMLINK := true 
+BOARD_NEEDS_VENDORIMAGE_SYMLINK := false
 
 # Treble
-#BOARD_VNDK_VERSION := current
-#PRODUCT_FULL_TREBLE_OVERRIDE := true
+BOARD_VNDK_VERSION := current
+PRODUCT_FULL_TREBLE_OVERRIDE := true
 
 # Camera
-USE_DEVICE_SPECIFIC_CAMERA := true
-# Force camera module to be compiled only in 32-bit mode on 64-bit systems
-# Once camera module can run in the native mode of the system (either
-# 32-bit or 64-bit), the following line should be deleted
-BOARD_QTI_CAMERA_32BIT_ONLY := true
-TARGET_USES_MEDIA_EXTENSIONS := true
-TARGET_HAS_LEGACY_CAMERA_HAL1 := true
-TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
-    /system/vendor/bin/mm-qcamera-daemon=22
-
-# Dexpreopt
-ifeq ($(HOST_OS),linux)
-  ifneq ($(TARGET_BUILD_VARIANT),eng)
-    WITH_DEXPREOPT ?= true
-  endif
-endif
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
+#BOARD_QTI_CAMERA_32BIT_ONLY := true
 
 # Added to indicate that protobuf-c is supported in this build
 PROTOBUF_SUPPORTED := true
@@ -185,6 +169,7 @@ BOARD_USES_QC_TIME_SERVICES := true
 FEATURE_QCRIL_UIM_SAP_SERVER_MODE := true
 TARGET_RIL_VARIANT := caf
 TARGET_USES_OLD_MNC_FORMAT := true
+ENABLE_VENDOR_RIL_SERVICE := true
 
 # Remove secdiscard command
 TARGET_REMOVE_SECDISCARD_COMMAND := true
@@ -203,7 +188,7 @@ BOARD_HOSTAPD_PRIVATE_LIB       :=lib_driver_cmd_qcwcn
 BOARD_WLAN_DEVICE               := qcwcn
 BOARD_WPA_SUPPLICANT_DRIVER :=  NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
-#PRODUCT_VENDOR_MOVE_ENABLED := true
+PRODUCT_VENDOR_MOVE_ENABLED := true
 TARGET_USES_WCNSS_CTRL          := true
 WIFI_AVOID_IFACE_RESET_MAC_CHANGE := true
 WIFI_DRIVER_MODULE_NAME         := "wlan"
@@ -238,8 +223,7 @@ TARGET_LD_SHIM_LIBS += \
     /system/vendor/lib64/libizat_core.so|libshims_get_process_name.so \
     /system/vendor/lib64/libril-qc-qmi-1.so|libaudioclient_shim.so \
     /system/vendor/lib64/libmm-abl.so|libshims_thermal.so \
-    /system/vendor/lib64/libmm-qdcm-diag.so|libshims_thermal.so \
-    /system/vendor/lib64/libril-qc-qmi-1.so|libshim_ril.so
+    /system/vendor/lib64/libmm-qdcm-diag.so|libshims_thermal.so
 
 # TWRP Support
 ifeq ($(WITH_TWRP),true)

@@ -3,6 +3,7 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE           := bdaddr_xiaomi
 LOCAL_MODULE_TAGS      := optional
+LOCAL_VENDOR_MODULE    := true
 LOCAL_SRC_FILES        := bdaddr_xiaomi.c
 LOCAL_CFLAGS           += -Wall
 LOCAL_PROPRIETARY_MODULE := true

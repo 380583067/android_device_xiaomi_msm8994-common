@@ -50,4 +50,13 @@ $(RFS_MSM_MPSS_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 
 ALL_DEFAULT_INSTALLED_MODULES += $(RFS_MSM_ADSP_SYMLINKS) $(RFS_MSM_MPSS_SYMLINKS)
 
+LIBGUI_SYMLINK += $(TARGET_OUT_VENDOR)/lib/libgui.so
+LIBGUI_SYMLINK += $(TARGET_OUT_VENDOR)/lib64/libgui.so
+$(LIBGUI_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "libgui.so link: $@"
+	@mkdir -p $(dir $@)
+	@rm -rf $@
+	$(hide) ln -sf libgui_vendor.so $@
+ALL_DEFAULT_INSTALLED_MODULES += $(LIBGUI_SYMLINK)
+
 endif

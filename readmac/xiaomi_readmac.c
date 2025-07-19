@@ -21,7 +21,7 @@
 #include <string.h>
 #include <cutils/log.h>
 #include <errno.h>
-
+#include <stdio.h>
 #define XIAOMI_OUI_LIST_SIZE       41
 #define MAC_ADDR_SIZE              6
 #define WLAN_MAC_BIN               "/data/misc/wifi/wlan_mac.bin"

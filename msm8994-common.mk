@@ -3,6 +3,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 # Get non-open-source specific aspects
 $(call inherit-product-if-exists, vendor/xiaomi/msm8994-common/msm8994-common-vendor.mk)
 
+# Include GSI keys
+$(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
+
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
     $(LOCAL_PATH)/overlay-lineage
@@ -90,9 +93,10 @@ PRODUCT_COPY_FILES += \
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio.service \
-    android.hardware.audio@5.0-impl \
-    android.hardware.audio.effect@5.0-impl \
+    android.hardware.audio@6.0-impl \
+    android.hardware.audio.effect@6.0-impl \
     android.hardware.soundtrigger@2.2-impl \
+    android.hardware.soundtrigger@2.2.vendor \
     audio.a2dp.default \
     audio.primary.$(BOARD_PLATFORM) \
     audio.r_submix.default \
@@ -103,11 +107,20 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessing \
     tinymix
 
+# ANT+
+PRODUCT_PACKAGES += \
+    AntHalService-Soong \
+    com.dsi.ant@1.0.vendor
+
 # Bluetooth
 PRODUCT_PACKAGES += \
+    android.hardware.bluetooth.audio@2.0.vendor \
+    android.hardware.bluetooth.audio@2.1.vendor \
+    android.hardware.bluetooth.a2dp@1.0.vendor \
     bdaddr_xiaomi \
     libbt-vendor \
-    android.hardware.bluetooth@1.0-impl
+    android.hardware.bluetooth@1.0-impl \
+    android.hardware.bluetooth@1.0.vendor
 
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
@@ -116,19 +129,37 @@ PRODUCT_PACKAGES += \
     libcnefeatureconfig \
     services-ext
 
-# Fastbootd
-PRODUCT_PACKAGES += \
-    fastbootd
-
 # Dummy hidl lib for oreo blobs
 PRODUCT_PACKAGES += \
+    android.hidl.allocator@1.0.vendor \
+    android.hidl.base@1.0 \
+    android.hidl.base@1.0.vendor \
+    android.hidl.manager@1.0 \
+    android.hidl.manager@1.0.vendor \
+    android.hidl.memory@1.0.vendor \
     libhidltransport \
+    libhidltransport.vendor \
     libhwbinder \
     libhwbinder.vendor
+
+# DRM
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-impl \
+    android.hardware.drm@1.0-service \
+    android.hardware.drm@1.4.vendor \
+    android.hardware.drm@1.4-service.clearkey
 
 # Display Device Config
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/displayconfig/display_id_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_id_0.xml
+
+# GNSS
+PRODUCT_PACKAGES += \
+    android.hardware.gnss@1.2.vendor \
+    android.hardware.gnss@2.1.vendor \
+    android.hardware.gnss@3.0.vendor \
+    android.hardware.gnss@1.0-impl \
+    libshims_get_process_name
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -143,15 +174,18 @@ PRODUCT_PACKAGES += \
     
 # Gatekeeper HAL
 PRODUCT_PACKAGES += \
+    android.hardware.gatekeeper@1.0 \
+    android.hardware.gatekeeper@1.0.vendor \
     android.hardware.gatekeeper@1.0-impl
-
-# GNSS HAL
-PRODUCT_PACKAGES += \
-    libshims_get_process_name \
-    android.hardware.gnss@1.0-impl
 
 # Graphics
 PRODUCT_PACKAGES += \
+    android.frameworks.displayservice@1.0.vendor \
+    android.hardware.configstore@1.1-service \
+    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.allocator@2.0-service \
+    android.hardware.graphics.mapper@2.0-impl-2.1 \
+    android.hardware.graphics.composer@2.1-service \
     copybit.$(BOARD_PLATFORM) \
     gralloc.$(BOARD_PLATFORM) \
     hwcomposer.$(BOARD_PLATFORM) \
@@ -159,12 +193,6 @@ PRODUCT_PACKAGES += \
     liboverlay \
     libtinyxml \
     libgenlock \
-    android.hardware.configstore@1.1-service \
-    android.hardware.graphics.allocator@2.0-impl \
-    android.hardware.graphics.allocator@2.0-service \
-    android.hardware.graphics.mapper@2.0-impl-2.1 \
-    android.hardware.memtrack@1.0-impl \
-    android.hardware.graphics.composer@2.1-service
 
 # Health
 PRODUCT_PACKAGES += \
@@ -177,11 +205,8 @@ PRODUCT_PACKAGES += \
     ebtables \
     ethertypes
 
-# Camera
+# Shims
 PRODUCT_PACKAGES += \
-    camera.$(BOARD_PLATFORM) \
-    camera.device@1.0-impl \
-    android.hardware.camera.provider@2.4-impl \
     libshim_atomic \
     libshim_camera
 
@@ -199,13 +224,24 @@ PRODUCT_PACKAGES += \
 
 # LiveDisplay
 PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@2.0-service-legacymm
+    vendor.lineage.livedisplay@2.0-service-legacymm \
+    vendor.lineage.livedisplay@2.0.vendor
+
+# Memtrack
+PRODUCT_PACKAGES += \
+    android.hardware.memtrack@1.0 \
+    android.hardware.memtrack@1.0.vendor \
+    android.hardware.memtrack@1.0-impl \
+    android.hardware.memtrack@1.0-service
+
+# Net
+PRODUCT_PACKAGES += \
+    android.system.net.netd@1.1.vendor \
+    netutils-wrapper-1.0
 
 # OMX
 PRODUCT_PACKAGES += \
-    android.hardware.drm@1.0-impl \
-    android.hardware.drm@1.0-service \
-    android.hardware.drm@1.4-service.clearkey \
+    android.hardware.media.c2@1.1.vendor \
     libc2dcolorconvert \
     libdivxdrmdecrypt \
     libdrmclearkeyplugin \
@@ -238,7 +274,19 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power-service-qti
+    android.hardware.power@1.2.vendor \
+    android.hardware.power-service-qti \
+    android.hardware.power@1.0 \
+    android.hardware.power@1.1 \
+    vendor.qti.hardware.perf@1.0 \
+    vendor.qti.hardware.perf@2.0 \
+    vendor.qti.hardware.perf@1.0.vendor \
+    vendor.qti.hardware.perf@2.0.vendor
+
+# Protobuf
+PRODUCT_PACKAGES += \
+    libprotobuf-cpp-full-vendorcompat \
+    libprotobuf-cpp-lite-vendorcompat
 
 # Seccomp
 PRODUCT_COPY_FILES += \
@@ -315,6 +363,16 @@ PRODUCT_PACKAGES += \
     init.qcom.usb.sh \
     ueventd.qcom.rc \
     init.qcom.post_boot.sh
+
+# RIL
+PRODUCT_PACKAGES += \
+    android.hardware.radio@1.4.vendor \
+    android.hardware.radio.config@1.2.vendor \
+    android.hardware.radio.deprecated@1.0.vendor \
+    android.hardware.secure_element@1.0.vendor \
+    librmnetctl \
+    libcnefeatureconfig \
+    libxml2
     
 # Shim for S
 PRODUCT_PACKAGES += \
@@ -322,20 +380,8 @@ PRODUCT_PACKAGES += \
     
 # Vendor HIDL
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0.vendor \
-    android.frameworks.displayservice@1.0.vendor \
-    android.hardware.drm@1.4.vendor \
-    android.hardware.gatekeeper@1.0 \
-    android.hardware.gatekeeper@1.0.vendor \
-    android.hardware.media.c2@1.1.vendor \
     android.hardware.neuralnetworks@1.3 \
-    android.hardware.neuralnetworks@1.3.vendor \
-    android.hardware.radio.config@1.2.vendor \
-    android.hardware.radio@1.4.vendor \
-    android.hardware.radio.deprecated@1.0.vendor \
-    android.hardware.secure_element@1.0.vendor \
-    android.system.net.netd@1.1.vendor \
-    android.hardware.gnss@2.1.vendor
+    android.hardware.neuralnetworks@1.3.vendor
 
 # Fwk-detect
 PRODUCT_PACKAGES += \
@@ -346,4 +392,63 @@ PRODUCT_PACKAGES += \
 
 # VNDK
 PRODUCT_PACKAGES += \
-    libstdc++.vendor
+    libgui_vendor \
+    libstdc++.vendor \
+    libpowermanager.vendor
+
+# VNDK
+# Some hax for VNDK and TREBLE to allow legacy blobs to work this goes on proprietary files.... its a old platform after all
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libui.so:$(TARGET_COPY_OUT_VENDOR)/lib/libui.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libbinder.so:$(TARGET_COPY_OUT_VENDOR)/lib/libbinder.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libsqlite.so:$(TARGET_COPY_OUT_VENDOR)/lib/libsqlite.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libandroid.so:$(TARGET_COPY_OUT_VENDOR)/lib/libandroid.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libandroid_runtime.so:$(TARGET_COPY_OUT_VENDOR)/lib/libandroid_runtime.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libharfbuzz_ng.so:$(TARGET_COPY_OUT_VENDOR)/lib/libharfbuzz_ng.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libandroidfw.so:$(TARGET_COPY_OUT_VENDOR)/lib/libandroidfw.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libhwui.so:$(TARGET_COPY_OUT_VENDOR)/lib/libhwui.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libminikin.so:$(TARGET_COPY_OUT_VENDOR)/lib/libminikin.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libpowermanager.so:$(TARGET_COPY_OUT_VENDOR)/lib/libpowermanager.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libnetd_client.so:$(TARGET_COPY_OUT_VENDOR)/lib/libnetd_client.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libinput.so:$(TARGET_COPY_OUT_VENDOR)/lib/libinput.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libsensor.so:$(TARGET_COPY_OUT_VENDOR)/lib/libsensor.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/libactivitymanager_aidl.so:$(TARGET_COPY_OUT_VENDOR)/lib/libactivitymanager_aidl.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/audioclient-types-aidl-cpp.so:$(TARGET_COPY_OUT_VENDOR)/lib/audioclient-types-aidl-cpp.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/audioflinger-aidl-cpp.so:$(TARGET_COPY_OUT_VENDOR)/lib/audioflinger-aidl-cpp.so \
+    $(LOCAL_PATH)/vndk-v32-prebuild/arm/vndk-core/audiopolicy-types-aidl-cpp.so:$(TARGET_COPY_OUT_VENDOR)/lib/audiopolicy-types-aidl-cpp.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm/vndk-core/android.hardware.graphics.allocator@2.0.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.graphics.allocator@2.0.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm/vndk-core/android.hardware.graphics.allocator@3.0.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.graphics.allocator@3.0.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm/vndk-core/android.hardware.graphics.allocator@4.0.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.graphics.allocator@4.0.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm/vndk-core/android.hardware.memtrack@1.0.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.memtrack@1.0.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm/vndk-core/android.hardware.power@1.0.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.power@1.0.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm/vndk-core/android.hardware.power@1.1.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.power@1.1.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm/vndk-core/android.hardware.power-V2-cpp.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.power-V2-cpp.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm/vndk-core/libstagefright_foundation.so:$(TARGET_COPY_OUT_VENDOR)/lib/libstagefright_foundation.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm/vndk-core/libhardware_legacy.so:$(TARGET_COPY_OUT_VENDOR)/lib/libhardware_legacy.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libui.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libui.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libbinder.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libbinder.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libsqlite.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libsqlite.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libandroid.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libandroid \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libandroid_runtime.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libandroid_runtime.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libharfbuzz_ng.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libharfbuzz_ng.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libandroidfw.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libandroidfw.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libhwui.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libhwui.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libminikin.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libminikin.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libpowermanager.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libpowermanager.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libnetd_client.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libnetd_client.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libinput.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libinput.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libsensor.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libsensor.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libactivitymanager_aidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libactivitymanager_aidl.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/audioclient-types-aidl-cpp.so:$(TARGET_COPY_OUT_VENDOR)/lib64/audioclient-types-aidl-cpp.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/audioflinger-aidl-cpp.so:$(TARGET_COPY_OUT_VENDOR)/lib64/audioflinger-aidl-cpp.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/audiopolicy-types-aidl-cpp.so:$(TARGET_COPY_OUT_VENDOR)/lib64/audiopolicy-types-aidl-cpp.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/android.hardware.graphics.allocator@2.0.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.graphics.allocator@2.0.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/android.hardware.graphics.allocator@3.0.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.graphics.allocator@3.0.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/android.hardware.graphics.allocator@4.0.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.graphics.allocator@4.0.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/android.hardware.memtrack@1.0.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.memtrack@1.0.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/android.hardware.power@1.0.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.power@1.0.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/android.hardware.power@1.1.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.power@1.1.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/android.hardware.power-V2-cpp.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.power-V2-cpp.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libstagefright_foundation.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libstagefright_foundation.so \
+    $(LOCAL_PATH)//vndk-v32-prebuild/arm64/vndk-core/libhardware_legacy.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libhardware_legacy.so \
+    

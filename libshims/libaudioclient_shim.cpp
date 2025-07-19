@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,10 +16,12 @@
 
 #include <media/AudioSystem.h>
 
-extern "C" uintptr_t _ZN7android11AudioSystem16addErrorCallbackEPFviE(
-        android::audio_error_callback cb);
+namespace android {
+    extern "C" uintptr_t _ZN7android11AudioSystem16addErrorCallbackEPFviE(
+            audio_error_callback cb);
 
-extern "C" void _ZN7android11AudioSystem16setErrorCallbackEPFviE(
-        android::audio_error_callback cb) {
-    _ZN7android11AudioSystem16addErrorCallbackEPFviE(cb);
+    extern "C" void _ZN7android11AudioSystem16setErrorCallbackEPFviE(
+            audio_error_callback cb) {
+        _ZN7android11AudioSystem16addErrorCallbackEPFviE(cb);
+    }
 }
